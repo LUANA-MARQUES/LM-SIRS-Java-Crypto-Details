@@ -43,4 +43,22 @@ public class AESCipherByteArrayMixer implements ByteArrayMixer {
 
         return cipher.doFinal(byteArray);
     }
+
+    public byte[] cipher(byte[] byteArray) throws Exception {
+        // Get a AES cipher object and print the provider
+        Cipher cipher = Cipher.getInstance("AES/" + mode + "/PKCS5Padding");
+        System.out.println(cipher.getProvider().getInfo());
+
+        System.out.println("Ciphering ...");
+        Key key = AESKeyGenerator.read(keyFile);
+        if (!mode.equals("ECB")) {
+            // Initialize the cipher with a null IV
+            
+            cipher.init(this.opmode, key, new IvParameterSpec(new byte[16]));
+        } else {
+            cipher.init(this.opmode, key);
+        }
+
+        return cipher.doFinal(byteArray);
+    }
 }

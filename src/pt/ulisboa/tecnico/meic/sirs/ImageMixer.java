@@ -22,7 +22,7 @@ public class ImageMixer {
      * @param image the image to convert
      * @return a byte array with the pixels from the image (one pixel is one bit)
      */
-    private static byte[] imageToByteArray(BufferedImage image) {
+    static byte[] imageToByteArray(BufferedImage image) {
         DataBuffer imageDataBuffer = image.getRaster().getDataBuffer();
         return ((DataBufferByte) imageDataBuffer).getData();
     }
@@ -137,4 +137,13 @@ public class ImageMixer {
             System.out.println("Error while writing image file: " + e);
         }
     }
+
+	public static BufferedImage byteArrayToImage(byte[] cipheredBytes, int width, int height) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
+        DataBuffer dataBuffer = new DataBufferByte(cipheredBytes, cipheredBytes.length);
+        SampleModel sampleModel = new MultiPixelPackedSampleModel(DataBuffer.TYPE_BYTE, width, height, 1);
+        WritableRaster raster = Raster.createWritableRaster(sampleModel, dataBuffer, new Point(0, 0));
+        image.setData(raster);
+        return image;
+	}
 }
